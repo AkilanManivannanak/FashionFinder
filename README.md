@@ -25,11 +25,11 @@
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║                        🏆  KEY NUMBERS                                  ║
+║                        🏆  KEY NUMBERS                                   ║
 ╠══════════════════════╦═══════════════╦══════════════╦════════════════════╣
 ║  Metric              ║  Value        ║  Target      ║  Status            ║
 ╠══════════════════════╬═══════════════╬══════════════╬════════════════════╣
-║  FAISS Median        ║  1.79 ms      ║  < 10 ms     ║  ✅ 4.8x FASTER   ║
+║  FAISS Median        ║  1.79 ms      ║  < 10 ms     ║  ✅ 4.8x FASTER    ║
 ║  FAISS p95           ║  4.04 ms      ║  < 20 ms     ║  ✅ PASS           ║
 ║  Baseline Median     ║  8.63 ms      ║  Reference   ║  📊 Exact          ║
 ║  Graph Median        ║  9.37 ms      ║  Reference   ║  📊 Approximate    ║
@@ -121,13 +121,13 @@ Every candidate set is **pre-filtered by a Hash Table** (category) and a **Neste
                                    │
                                    ▼
                     ┌──────────────────────────────┐
-                    │  FastAPI  (8 endpoints :8001) │
+                    │  FastAPI  (8 endpoints :8001)│
                     └──────────────┬───────────────┘
                                    │
                                    ▼
                     ┌──────────────────────────────┐
-                    │   Streamlit UI  (:8502)       │
-                    │  Search · Benchmark · Graph   │
+                    │   Streamlit UI  (:8502)      │
+                    │  Search · Benchmark · Graph  │
                     └──────────────────────────────┘
 ```
 
@@ -137,16 +137,16 @@ Every candidate set is **pre-filtered by a Hash Table** (category) and a **Neste
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                          FIVE DATA STRUCTURES IN ACTION                            ║
-╠═══════════════════════╦══════════════════════╦═════════════════════════════════════╣
-║  Structure            ║  File                ║  Role                               ║
-╠═══════════════════════╬══════════════════════╬═════════════════════════════════════╣
-║  Hash Table           ║  hash_index.py       ║  category -> indices  O(1) lookup   ║
-║  Nested Hash Table    ║  color_index.py      ║  category -> color -> indices  O(1) ║
-║  k-NN Graph (AdjList) ║  knn_graph.py        ║  Similarity graph  O(log n) traversal║
-║  Min-Heap / PQ        ║  heap_ranker.py      ║  Top-k ranking  O(n log k)          ║
-║  FAISS IVF Index      ║  faiss_index.py      ║  Cluster ANN  sub-linear search     ║
-╚═══════════════════════╩══════════════════════╩═════════════════════════════════════╝
+║                          FIVE DATA STRUCTURES IN ACTION                              ║
+╠═══════════════════════╦══════════════════════╦═══════════════════════════════════════╣
+║  Structure            ║  File                ║  Role                                 ║
+╠═══════════════════════╬══════════════════════╬═══════════════════════════════════════╣
+║  Hash Table           ║  hash_index.py       ║  category -> indices  O(1) lookup     ║
+║  Nested Hash Table    ║  color_index.py      ║  category -> color -> indices  O(1)   ║
+║  k-NN Graph (AdjList) ║  knn_graph.py        ║  Similarity graph  O(log n) traversal ║
+║  Min-Heap / PQ        ║  heap_ranker.py      ║  Top-k ranking  O(n log k)            ║
+║  FAISS IVF Index      ║  faiss_index.py      ║  Cluster ANN  sub-linear search       ║
+╚═══════════════════════╩══════════════════════╩═══════════════════════════════════════╝
 ```
 
 ### 1. Hash Table — `hash_index.py`
@@ -183,7 +183,7 @@ Facebook AI Similarity Search clusters all 512-dim embeddings into 100 Voronoi c
 ╠═══════════════════════╬═══════════╩═══════════╩═══════════════╣
 ║  FAISS vs Baseline    ║  4.8x FASTER  |  90% recall retained  ║
 ║  Hash Index Savings   ║  ~70% search space reduction          ║
-╚═══════════════════════╩════════════════════════════════════════╝
+╚═══════════════════════╩═══════════════════════════════════════╝
 ```
 
 **Key insight:** FAISS is **4.8x faster** than baseline while finding 9 of 10 same results. The graph wins at scale (1M+ products) where brute-force becomes infeasible. Hash Table + Nested Hash Table pre-filter benefits all three methods equally.
@@ -266,7 +266,7 @@ Facebook AI Similarity Search clusters all 512-dim embeddings into 100 Voronoi c
 │                 │  KMP_DUPLICATE_LIB_OK=TRUE (Mac OpenMP fix)   │
 ├─────────────────┼───────────────────────────────────────────────┤
 │  UI             │  Streamlit 3-tab interface                    │
-│                 │  Matplotlib charts + NetworkX graph viz        │
+│                 │  Matplotlib charts + NetworkX graph viz       │
 ├─────────────────┼───────────────────────────────────────────────┤
 │  Evaluation     │  benchmark.py                                 │
 │                 │  Recall@k + latency median/p95/p99            │
@@ -398,7 +398,7 @@ python benchmark.py --n_queries 80 --k 10
 ## 👥 Team Contributions
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════════════╗
+╔════════════════════════════════════════════════════════════════════════════════════════════════╗
 ║                              INDIVIDUAL CONTRIBUTIONS                                          ║
 ╠══════════════════════════════════════╦═════════════════════════════════════════════════════════╣
 ║  Akilan Manivannan                   ║  Akila Lourdes Miriyala Francis                         ║
@@ -413,7 +413,7 @@ python benchmark.py --n_queries 80 --k 10
 ║  • k-NN Graph design and build       ║  • Hash Table (hash_index.py)                           ║
 ║  • knn_graph.py adjacency list       ║  • Nested Hash Table (color_index.py)                   ║
 ║  • BFS traversal implementation      ║  • Min-Heap ranker (heap_ranker.py)                     ║
-║  • Graph save/load (pickle)          ║  • Searcher unified interface (searcher.py)              ║
+║  • Graph save/load (pickle)          ║  • Searcher unified interface (searcher.py)             ║
 ╠══════════════════════════════════════╬═════════════════════════════════════════════════════════╣
 ║  ML / Retrieval                      ║  ML / Retrieval                                         ║
 ║  • ResNet18 embedder (embedder.py)   ║  • FAISS IVF index (faiss_index.py)                     ║
@@ -441,7 +441,7 @@ python benchmark.py --n_queries 80 --k 10
 ║  MLOps / DevOps                      ║  MLOps / DevOps                                         ║
 ║  • GitHub repo setup (AkilanManiv..) ║  • GitHub repo setup (AKilalours)                       ║
 ║  • SSH key configuration             ║  • SSH key push from her Mac                            ║
-║  • Port isolation (8001 / 8502)      ║  • KMP_DUPLICATE_LIB_OK fix discovery                  ║
+║  • Port isolation (8001 / 8502)      ║  • KMP_DUPLICATE_LIB_OK fix discovery                   ║
 ║  • Postmortem documentation          ║  • README + submission docx authoring                   ║
 ╚══════════════════════════════════════╩═════════════════════════════════════════════════════════╝
 ```
