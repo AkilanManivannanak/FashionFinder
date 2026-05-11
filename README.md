@@ -26,6 +26,8 @@
 
 **CS 631 — Algorithms & Data Structures · Prof. Dr. Abla Bedoui · LIU Brooklyn · Spring 2026**
 
+🚀 **[Live Demo](https://huggingface.co/spaces/Akilanak/FashionFinder)** &nbsp;&nbsp;|&nbsp;&nbsp; 📦 **[Source Code](https://github.com/AkilanManivannanak/FashionFinder)**
+
 </div>
 
 ---
