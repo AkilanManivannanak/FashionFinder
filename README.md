@@ -26,7 +26,7 @@
 
 **CS 631 — Algorithms & Data Structures · Prof. Dr. Abla Bedoui · LIU Brooklyn · Spring 2026**
 
-🚀 **[Live Demo](https://huggingface.co/spaces/Akilanak/FashionFinder)** &nbsp;&nbsp;|&nbsp;&nbsp; 📦 **[Source Code](https://github.com/AkilanManivannanak/FashionFinder)**
+🚀 **[Live Demo - Full Streamlit](https://ruse-catnap-oblong.ngrok-free.dev)** (keep Mac on) &nbsp;·&nbsp; 🎯 **[Deployed Demo](https://huggingface.co/spaces/Akilanak/FashionFinder)** &nbsp;&nbsp;|&nbsp;&nbsp; 📦 **[Source Code](https://github.com/AkilanManivannanak/FashionFinder)**
 
 </div>
 
@@ -36,7 +36,8 @@
 
 | | Link |
 |--|------|
-| 🚀 **Live Demo** | https://huggingface.co/spaces/Akilanak/FashionFinder |
+| 🚀 **Full Demo (Streamlit)** | https://ruse-catnap-oblong.ngrok-free.dev |
+| 🎯 **Deployed Demo (Gradio)** | https://huggingface.co/spaces/Akilanak/FashionFinder |
 | 📦 **Source Code** | https://github.com/AkilanManivannanak/FashionFinder |
 | 📖 **API Docs** | http://localhost:8001/docs (local) |
 
