@@ -1,1 +1,14 @@
-This content is no longer available.
+# Render Blueprint: one web service running the FastAPI backend (port 8001) and the
+# Streamlit UI (Render's $PORT) via start.sh.
+services:
+  - type: web
+    name: fashionfinder
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash start.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: KMP_DUPLICATE_LIB_OK
+        value: "TRUE"
