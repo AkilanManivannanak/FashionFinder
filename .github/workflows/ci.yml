@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # The 44k product images are not needed for linting or unit tests.
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            /*
+            !/archive-2/
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install lint and unit-test dependencies
+        run: pip install ruff pytest numpy requests
+      - name: Ruff (syntax errors, undefined names, bare except)
+        run: ruff check --select E9,F63,F7,F82,E722 .
+      - name: Unit tests
+        run: |
+          python -m pytest -q || code=$?
+          # exit code 5 = no tests collected yet (fine until the test PRs are merged)
+          [ "${code:-0}" -eq 0 ] || [ "${code:-0}" -eq 5 ]
