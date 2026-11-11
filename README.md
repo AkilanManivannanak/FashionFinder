@@ -1,5 +1,7 @@
 <div align="center">
 
+[![ci](https://github.com/AkilanManivannanak/FashionFinder/actions/workflows/ci.yml/badge.svg)](https://github.com/AkilanManivannanak/FashionFinder/actions/workflows/ci.yml)
+
 ```
 ███████╗ █████╗ ███████╗██╗  ██╗██╗ ██████╗ ███╗   ██╗    ███████╗██╗███╗   ██╗██████╗ ███████╗██████╗
 ██╔════╝██╔══██╗██╔════╝██║  ██║██║██╔═══██╗████╗  ██║    ██╔════╝██║████╗  ██║██╔══██╗██╔════╝██╔══██╗
