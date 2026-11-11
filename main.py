@@ -30,6 +30,7 @@ from visual_dna    import VisualDNA
 from style_transfer_search import StyleTransferSearch
 from fashion_timeline import FashionTimeline
 from realtime_index import RealTimeIndex
+from url_fetch import UnsafeURLError, fetch_image_bytes
 
 EMBEDDINGS_PATH = "embeddings/embeddings.npy"
 METADATA_PATH   = "embeddings/metadata.csv"
@@ -216,10 +217,11 @@ async def search_url(
     use_mmr: bool=False, mmr_lambda: float=Query(0.6, ge=0.0, le=1.0)
 ):
     try:
-        r = req_lib.get(image_url, timeout=10, headers={"User-Agent":"Mozilla/5.0"})
-        pil = Image.open(io.BytesIO(r.content))
-    except Exception as e:
-        raise HTTPException(400, f"Cannot fetch URL: {e}")
+        pil = Image.open(io.BytesIO(fetch_image_bytes(image_url)))
+    except UnsafeURLError as e:
+        raise HTTPException(400, str(e))
+    except (req_lib.RequestException, OSError):
+        raise HTTPException(400, "Cannot fetch or read an image from that URL.")
     vec = embedder.embed_pil(pil)
     results, latency = do_search(vec, k, method, category, color, brand, use_mmr=use_mmr, mmr_lambda=mmr_lambda)
     trend_tracker.log_search("url", method, results, latency, category, color, brand)
