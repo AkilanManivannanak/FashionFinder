@@ -36,6 +36,8 @@ class HeapRanker:
         If heap has fewer than k items, always add.
         Otherwise, only add if score beats the current worst.
         """
+        if self.k <= 0:
+            return
         if len(self._heap) < self.k:
             heapq.heappush(self._heap, (score, idx))
         elif score > self._heap[0][0]:
