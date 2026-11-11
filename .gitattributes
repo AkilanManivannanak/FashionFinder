@@ -1,5 +1,4 @@
 *.npy filter=lfs diff=lfs merge=lfs -text
 *.pkl filter=lfs diff=lfs merge=lfs -text
 *.index filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpg -filter -diff -merge -text
+# Product images (archive-2/images/*.jpg) are stored as normal Git blobs, not LFS.
