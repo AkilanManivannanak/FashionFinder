@@ -10,7 +10,9 @@ import requests as req_lib
 from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
-from typing import Optional, List
+from typing import Optional, List, Literal
+
+Method = Literal["faiss", "graph", "baseline"]  # retrieval methods do_search supports
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -194,9 +196,9 @@ def get_image(product_id: int):
 @app.post("/search/upload")
 async def search_upload(
     file: UploadFile = File(...),
-    k: int=Query(10), method: str=Query("faiss"),
+    k: int=Query(10, ge=1, le=100), method: Method=Query("faiss"),
     category: Optional[str]=None, color: Optional[str]=None, brand: Optional[str]=None,
-    use_mmr: bool=False, mmr_lambda: float=0.6
+    use_mmr: bool=False, mmr_lambda: float=Query(0.6, ge=0.0, le=1.0)
 ):
     contents = await file.read()
     try: pil = Image.open(io.BytesIO(contents))
@@ -209,9 +211,9 @@ async def search_upload(
 @app.post("/search/url")
 async def search_url(
     image_url: str,
-    k: int=Query(10), method: str=Query("faiss"),
+    k: int=Query(10, ge=1, le=100), method: Method=Query("faiss"),
     category: Optional[str]=None, color: Optional[str]=None, brand: Optional[str]=None,
-    use_mmr: bool=False, mmr_lambda: float=0.6
+    use_mmr: bool=False, mmr_lambda: float=Query(0.6, ge=0.0, le=1.0)
 ):
     try:
         r = req_lib.get(image_url, timeout=10, headers={"User-Agent":"Mozilla/5.0"})
@@ -226,9 +228,9 @@ async def search_url(
 @app.post("/search/by_id")
 def search_by_id(
     product_id: int,
-    k: int=Query(10), method: str=Query("faiss"),
+    k: int=Query(10, ge=1, le=100), method: Method=Query("faiss"),
     category: Optional[str]=None, color: Optional[str]=None, brand: Optional[str]=None,
-    use_mmr: bool=False, mmr_lambda: float=0.6
+    use_mmr: bool=False, mmr_lambda: float=Query(0.6, ge=0.0, le=1.0)
 ):
     qi  = idx_from_id(product_id)
     vec = embeddings[qi]
@@ -240,7 +242,7 @@ def search_by_id(
 @app.post("/search/multi_image")
 async def search_multi_image(
     files: List[UploadFile] = File(...),
-    k: int=Query(10), method: str=Query("faiss"),
+    k: int=Query(10, ge=1, le=100), method: Method=Query("faiss"),
     category: Optional[str]=None, use_mmr: bool=True
 ):
     if len(files) < 2: raise HTTPException(400, "Need at least 2 images.")
@@ -262,7 +264,7 @@ async def search_multi_image(
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @app.get("/brand_compare/{product_id}")
-def brand_compare(product_id: int, brands: str=Query(...), k_per_brand: int=Query(2), method: str=Query("faiss")):
+def brand_compare(product_id: int, brands: str=Query(...), k_per_brand: int=Query(2), method: Method=Query("faiss")):
     from heap_ranker import top_k_cosine
     qi  = idx_from_id(product_id)
     vec = embeddings[qi]
@@ -429,7 +431,7 @@ async def visual_dna_heatmap_upload(file: UploadFile = File(...)):
 async def clip_search_endpoint(
     file: Optional[UploadFile] = File(None),
     text: Optional[str] = None,
-    k: int=Query(10), method: str=Query("faiss"),
+    k: int=Query(10, ge=1, le=100), method: Method=Query("faiss"),
     image_weight: float=0.7, text_weight: float=0.3,
     category: Optional[str]=None
 ):
