@@ -162,7 +162,7 @@ class CLIPSearch:
                 batch_imgs.append(self.preprocess(img))
                 batch_idxs.append(len(all_vecs))
                 all_vecs.append(None)  # placeholder
-            except:
+            except OSError:  # unreadable or missing image: zero vector
                 all_vecs.append(np.zeros(512, dtype=np.float32))
 
             if len(batch_imgs) >= batch_size:

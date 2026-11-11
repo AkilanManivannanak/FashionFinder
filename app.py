@@ -267,7 +267,7 @@ def run_benchmark(n_queries, k):
             rb_r, bl = do_search(vec, k, "baseline", cat, query_idx=qi)
             b_lats.append(bl)
             rb = rb_r
-        except: pass
+        except Exception: pass  # skip a failed query in the benchmark
         b_ids = set(i for i,_ in rb)
         if faiss_index and faiss_index.index:
             try:
@@ -275,14 +275,14 @@ def run_benchmark(n_queries, k):
                 f_lats.append(fl)
                 f_ids = set(i for i,_ in rf)
                 f_rec.append(len(b_ids&f_ids)/len(b_ids) if b_ids else 0)
-            except: pass
+            except Exception: pass
         if knn_graph:
             try:
                 rg, gl = do_search(vec, k, "graph", cat, query_idx=qi)
                 g_lats.append(gl)
                 g_ids = set(i for i,_ in rg)
                 g_rec.append(len(b_ids&g_ids)/len(b_ids) if b_ids else 0)
-            except: pass
+            except Exception: pass
 
     def p(a, pct): return round(float(np.percentile(a, pct)), 2) if a else 0.0
     result = f"""
