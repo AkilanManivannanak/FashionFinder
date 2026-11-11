@@ -644,8 +644,12 @@ python benchmark.py --n_queries 80 --k 10
 ║  • Port isolation (8001 / 8502)           ║  • README + submission documentation         ║
 ║  • ngrok public tunneling                 ║  • Postmortem authoring                      ║
 ╚════════════════════════════════════════════╩══════════════════════════════════════════════╝
-```
 
+
+```
+## Project documents
+- [Presentation](docs/FashionFinder_Presentation.pptx)
+- [Project submission](docs/FashionFinder_Project_Submission.docx)
 ---
 
 <div align="center">
