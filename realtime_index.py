@@ -58,7 +58,7 @@ class RealTimeIndex:
                 self.buffer_metadata   = data.get("metadata", [])
                 self.next_id           = data.get("next_id", self.next_id)
                 print(f"RealTimeIndex: loaded {len(self.buffer_embeddings)} buffered products")
-            except:
+            except Exception:  # missing, corrupt or old-format buffer file: start empty
                 pass
 
     def _save_buffer(self):
@@ -100,7 +100,7 @@ class RealTimeIndex:
         img_path = os.path.join(self.images_dir, f"{new_id}.jpg")
         try:
             pil_image.convert("RGB").save(img_path, "JPEG", quality=85)
-        except:
+        except OSError:
             pass
 
         # Create metadata
@@ -146,7 +146,7 @@ class RealTimeIndex:
             try:
                 faiss_results = self.faiss_index.search(query_vec, candidates, k)
                 results.extend(faiss_results)
-            except:
+            except Exception:
                 pass
 
         # Search live buffer (exact brute-force — buffer is small)

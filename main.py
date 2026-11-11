@@ -76,7 +76,7 @@ try:
     from clip_search import CLIPSearch
     clip_search = CLIPSearch()
     clip_loaded = clip_search.available
-except:
+except Exception:  # CLIP is optional; any import/initialisation failure disables it
     clip_loaded = False
 
 print(f"Ready. {len(embeddings):,} products | {len(brand_index.all_brands())} brands | CLIP={'ON' if clip_loaded else 'OFF'}")
@@ -203,7 +203,7 @@ async def search_upload(
 ):
     contents = await file.read()
     try: pil = Image.open(io.BytesIO(contents))
-    except: raise HTTPException(400, "Cannot read image.")
+    except (OSError, ValueError): raise HTTPException(400, "Cannot read image.")
     vec = embedder.embed_pil(pil)
     results, latency = do_search(vec, k, method, category, color, brand, use_mmr=use_mmr, mmr_lambda=mmr_lambda)
     trend_tracker.log_search("upload", method, results, latency, category, color, brand)
@@ -254,7 +254,7 @@ async def search_multi_image(
         try:
             pil = Image.open(io.BytesIO(c))
             vecs.append(embedder.embed_pil(pil))
-        except: raise HTTPException(400, f"Cannot read {f.filename}")
+        except (OSError, ValueError): raise HTTPException(400, f"Cannot read {f.filename}")
     combined = np.mean(vecs, axis=0)
     norm = np.linalg.norm(combined)
     if norm > 0: combined /= norm

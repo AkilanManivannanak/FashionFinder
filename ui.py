@@ -133,7 +133,7 @@ C = {
 @st.cache_data(ttl=60)
 def api(endpoint, **params):
     try: return requests.get(f"{API}/{endpoint}", params=params, timeout=5).json()
-    except: return {}
+    except (requests.RequestException, ValueError): return {}
 
 health     = api("health")
 categories = [c["name"] for c in api("categories").get("categories", [])]
@@ -307,7 +307,7 @@ def card(item, col, show_exp=True):
             if r.status_code == 200:
                 img = Image.open(io.BytesIO(r.content))
                 st.image(img, use_container_width=True)
-        except: st.markdown("🖼️")
+        except (requests.RequestException, OSError): st.markdown("🖼️")
 
         bar = int(score * 100)
         st.markdown(
@@ -401,7 +401,7 @@ if ACTIVE == "Search":
                 r = requests.get(url_in, timeout=8, headers={"User-Agent":"Mozilla/5.0"})
                 c1, _ = st.columns([1, 3])
                 with c1: st.image(Image.open(io.BytesIO(r.content)), use_container_width=True)
-            except: st.info("Preview unavailable — will search anyway")
+            except (requests.RequestException, OSError): st.info("Preview unavailable — will search anyway")
 
     elif qmode == "🔢  Product ID":
         c1, c2 = st.columns([1, 3])
@@ -519,7 +519,7 @@ elif ACTIVE == "Brands":
                                 try:
                                     ir = requests.get(f"{API}/image/{pid}", timeout=3)
                                     if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                                except: st.markdown("🖼️")
+                                except (requests.RequestException, OSError): st.markdown("🖼️")
                                 st.markdown(
                                     f"<div style='font-size:10px;color:{C['text']};'>{item.get('name','')[:24]}</div>"
                                     f"<div style='font-size:10px;color:{C['teal']};font-weight:600;'>{score:.3f}</div>"
@@ -569,7 +569,7 @@ elif ACTIVE == "Style":
                                         try:
                                             ir = requests.get(f"{API}/image/{pid}", timeout=3)
                                             if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                                        except: pass
+                                        except (requests.RequestException, OSError): pass
                                         st.caption(f"{items[0].get('score',0):.3f}")
                 else:
                     results = r.get("results",[]); query = r.get("query_product",{})
@@ -580,7 +580,7 @@ elif ACTIVE == "Style":
                             try:
                                 ir = requests.get(f"{API}/image/{query.get('id')}", timeout=3)
                                 if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                            except: pass
+                            except (requests.RequestException, OSError): pass
                             st.caption(f"Original\n{query.get('baseColour','')}")
                         with cr:
                             rcols = st.columns(5)
@@ -606,7 +606,7 @@ elif ACTIVE == "Outfit":
                     try:
                         ir = requests.get(f"{API}/image/{qp.get('id')}", timeout=3)
                         if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                    except: pass
+                    except (requests.RequestException, OSError): pass
                 with ci:
                     st.markdown(
                         f"<div style='background:{C['card']};border:1px solid {C['border']};border-radius:10px;padding:16px;'>"
@@ -803,13 +803,13 @@ elif ACTIVE == "Add":
                     try:
                         ir = requests.get(f"{API}/image/{p.get('id')}", timeout=2)
                         if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                    except: st.markdown("🖼️")
+                    except (requests.RequestException, OSError): st.markdown("🖼️")
                     st.caption(f"🔴 {p.get('productDisplayName','')[:20]}")
             if st.button("🗑️ Clear Buffer"):
                 requests.delete(f"{API}/realtime/clear", timeout=5)
                 st.success("Cleared."); st.rerun()
         else: st.markdown(f"<div style='color:{C['dim']};font-size:13px;'>No products in buffer yet.</div>", unsafe_allow_html=True)
-    except: pass
+    except Exception: pass
 
 # ══════════════════════════════════════════════════════════════════════════════
 # BENCHMARK
@@ -1006,7 +1006,7 @@ elif ACTIVE == "Trending":
                         try:
                             ir = requests.get(f"{API}/image/{pid}", timeout=2)
                             if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), width=55)
-                        except: pass
+                        except (requests.RequestException, OSError): pass
                     st.markdown(f"<div style='height:1px;background:{C['border']};margin:6px 0;'></div>", unsafe_allow_html=True)
             else: st.markdown(f"<div style='color:{C['dim']};font-size:13px;'>Do some searches to see trends!</div>", unsafe_allow_html=True)
         with tc2:
@@ -1182,7 +1182,7 @@ elif ACTIVE == "Assistant":
                     try:
                         ir = requests.get(f"{API}/image/{pid}", timeout=2)
                         if ir.status_code == 200: st.image(Image.open(io.BytesIO(ir.content)), use_container_width=True)
-                    except: st.markdown("🖼️")
+                    except (requests.RequestException, OSError): st.markdown("🖼️")
                 with pc2:
                     role = p.get("outfit_role","")
                     st.markdown(
